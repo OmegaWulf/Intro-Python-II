@@ -87,16 +87,25 @@ def drop(itemName):
 
 def showInventory():
     if len(newPlayer.items) > 0:
-        print(f"Your inventory contains: {newPlayer.items}")
+        itemList = "Your inventory contains: "
+        for i in newPlayer.items:
+            itemList += f"{i.name} "
+        print(itemList)
     else:
         print(f"You have nothing in your inventory")
 
+def listRoomInventory():
+    if len(newPlayer.currentRoom.items) > 0:
+        itemList = "This room contains: "
+        for i in newPlayer.currentRoom.items:
+            itemList += f"{i.name} "
+        print(itemList)
 
 # Loop
 while True:
     print(f"\n Currently in room: {newPlayer.currentRoom.name}")
     print(f"\n {newPlayer.currentRoom.description}")
-    print(f"\n This room contains: {newPlayer.currentRoom.items}")
+    listRoomInventory()
 
     action = input("\nChoose an action:").split()
 
@@ -120,3 +129,6 @@ while True:
 
         elif action[0] == 'drop':
             drop(action[1])
+
+        else:
+            print(f"not a valid command")
