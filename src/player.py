@@ -15,3 +15,8 @@ class Player:
 
     def addItem(self, item):
         self.items.append(item)
+
+    def removeItem(self, itemName):
+        for i in self.items:
+            if i.name == itemName:
+                self.items.remove(i)

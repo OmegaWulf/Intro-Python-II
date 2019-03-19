@@ -1,5 +1,6 @@
 from room import Room
 from player import Player
+from item import Item
 
 # Declare all the rooms
 
@@ -37,11 +38,14 @@ earlier adventurers. The only exit is to the south."""),
 room['outside'].linkRoomTo(room['foyer'], 'n')
 room['foyer'].linkRoomTo(room['outside'], 's')
 room['foyer'].linkRoomTo(room['overlook'], 'n')
-room['foyer'].linkedRooms(room['narrow'], 'e')
+room['foyer'].linkRoomTo(room['narrow'], 'e')
 room['overlook'].linkRoomTo(room['foyer'], 's')
 room['narrow'].linkRoomTo(room['foyer'], 'w')
 room['narrow'].linkRoomTo(room['treasure'], 'n')
 room['treasure'].linkRoomTo(room['narrow'], 's')
+
+sword = Item("Sword", "A big sword")
+room['outside'].addItem(sword)
 
 #
 # Main
@@ -61,19 +65,54 @@ newPlayer = Player(room['outside'])
 # If the user enters "q", quit the game.
 
 def moveTo(direction):
-    move = direction + "_to"
+    if newPlayer.currentRoom.linkedRooms[direction] is not None:
+        newPlayer.currentRoom = newPlayer.currentRoom.linkedRooms[direction]
+    else:
+        print(f"Not a valid move")
 
+def take(itemName):
+    for i in newPlayer.currentRoom.items:
+        if i.name == itemName:
+            newPlayer.currentRoom.removeItem(itemName)
+            newPlayer.addItem(i)
+
+def drop(itemName):
+    for i in newPlayer.items:
+        if i.name == itemName:
+            newPlayer.removeItem(itemName)
+            newPlayer.currentRoom.addItem(i)
+
+def showInventory():
+    if len(newPlayer.items) > 0:
+        print(f"Your inventory contains: {newPlayer.items}")
+    else:
+        print(f"You have nothing in your inventory")
 
 
 while True:
     print(f"\n Currently in room: {newPlayer.currentRoom.name}")
     print(f"\n {newPlayer.currentRoom.description}")
+    print(f"\n This room contains: {newPlayer.currentRoom.items}")
 
-    action = input("\nChoose an action:")
+    action = input("\nChoose an action:").split()
 
-    if action == 'q':
-        print("Done")
-        break
+    if len(action) == 1:
+        if action == 'q':
+            print("Done")
+            break
 
-    if action == 'n' or 'e' or 's' or 'w':
-        moveTo(action)
+        if action == 'n' or 'e' or 's' or 'w':
+            moveTo(action)
+
+        elif action == 'i' or 'inventory':
+            showInventory()
+
+        else:
+            print(f"Not a valid command")
+
+    elif len(action) == 2:
+        if action[0] == 'take':
+            take(action[1])
+
+        elif action[0] == 'drop':
+            drop(action[1])

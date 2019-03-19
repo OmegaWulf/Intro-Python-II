@@ -20,5 +20,10 @@ class Room:
     def addItem(self, item):
         self.items.append(item)
 
+    def removeItem(self, item):
+        for i in self.items:
+            if i.name == item:
+                self.items.remove(i)
+
     def linkRoomTo(self, room, inDirection):
         self.linkedRooms[inDirection] = room
