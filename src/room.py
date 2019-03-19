@@ -3,7 +3,7 @@
 
 import item
 
-class room:
+class Room:
     name: str
     description: str
 

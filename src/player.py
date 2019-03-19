@@ -4,10 +4,14 @@
 import room
 import item
 
-class player:
+class Player:
     currentRoom: room
 
     items: [item] = []
 
     def __init__(self, room):
         self.currentRoom = room
+
+
+    def addItem(self, item):
+        self.items.append(item)

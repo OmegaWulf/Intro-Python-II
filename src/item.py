@@ -1,6 +1,6 @@
 
 
-class item:
+class Item:
     name: str
     desc: str
 
