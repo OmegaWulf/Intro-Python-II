@@ -1,13 +1,13 @@
 # Implement a class to hold room information. This should have name and
 # description attributes.
 
-import item
+from item import Item
 
 class Room:
     name: str
     description: str
 
-    items: [item] = []
+    items: [Item] = []
 
     def __init__(self, name, desc):
         self.name = name
