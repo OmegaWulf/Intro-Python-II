@@ -25,14 +25,23 @@ earlier adventurers. The only exit is to the south."""),
 
 # Link rooms together
 
-room['outside'].n_to = room['foyer']
-room['foyer'].s_to = room['outside']
-room['foyer'].n_to = room['overlook']
-room['foyer'].e_to = room['narrow']
-room['overlook'].s_to = room['foyer']
-room['narrow'].w_to = room['foyer']
-room['narrow'].n_to = room['treasure']
-room['treasure'].s_to = room['narrow']
+#room['outside'].n_to = room['foyer']
+#room['foyer'].s_to = room['outside']
+#room['foyer'].n_to = room['overlook']
+#room['foyer'].e_to = room['narrow']
+#room['overlook'].s_to = room['foyer']
+#room['narrow'].w_to = room['foyer']
+#room['narrow'].n_to = room['treasure']
+#room['treasure'].s_to = room['narrow']
+
+room['outside'].linkRoomTo(room['foyer'], 'n')
+room['foyer'].linkRoomTo(room['outside'], 's')
+room['foyer'].linkRoomTo(room['overlook'], 'n')
+room['foyer'].linkedRooms(room['narrow'], 'e')
+room['overlook'].linkRoomTo(room['foyer'], 's')
+room['narrow'].linkRoomTo(room['foyer'], 'w')
+room['narrow'].linkRoomTo(room['treasure'], 'n')
+room['treasure'].linkRoomTo(room['narrow'], 's')
 
 #
 # Main
@@ -51,8 +60,10 @@ newPlayer = Player(room['outside'])
 #
 # If the user enters "q", quit the game.
 
-# def moveTo(direction):
-#    if direction == 'n':
+def moveTo(direction):
+    move = direction + "_to"
+
+
 
 while True:
     print(f"\n Currently in room: {newPlayer.currentRoom.name}")

@@ -3,11 +3,14 @@
 
 from item import Item
 
+
 class Room:
     name: str
     description: str
 
     items: [Item] = []
+
+    linkedRooms = {}
 
     def __init__(self, name, desc):
         self.name = name
@@ -16,3 +19,6 @@ class Room:
 
     def addItem(self, item):
         self.items.append(item)
+
+    def linkRoomTo(self, room, inDirection):
+        self.linkedRooms[inDirection] = room
