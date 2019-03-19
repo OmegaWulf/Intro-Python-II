@@ -64,8 +64,11 @@ newPlayer = Player(room['outside'])
 #
 # If the user enters "q", quit the game.
 
+#if newPlayer.currentRoom.linkedRooms[direction] is not None:
+
+# Private Functions
 def moveTo(direction):
-    if newPlayer.currentRoom.linkedRooms[direction] is not None:
+    if direction in newPlayer.currentRoom.linkedRooms:
         newPlayer.currentRoom = newPlayer.currentRoom.linkedRooms[direction]
     else:
         print(f"Not a valid move")
@@ -89,6 +92,7 @@ def showInventory():
         print(f"You have nothing in your inventory")
 
 
+# Loop
 while True:
     print(f"\n Currently in room: {newPlayer.currentRoom.name}")
     print(f"\n {newPlayer.currentRoom.description}")
@@ -101,10 +105,10 @@ while True:
             print("Done")
             break
 
-        if action == 'n' or 'e' or 's' or 'w':
+        if action in ('n', 'e', 's', 'w'):
             moveTo(action)
 
-        elif action == 'i' or 'inventory':
+        elif action in ('i', 'inventory'):
             showInventory()
 
         else:
