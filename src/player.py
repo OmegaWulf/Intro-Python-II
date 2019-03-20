@@ -5,8 +5,6 @@ from room import Room
 from item import Item
 
 class Player:
-    currentRoom: Room
-
     items: [Item] = []
 
     def __init__(self, room):

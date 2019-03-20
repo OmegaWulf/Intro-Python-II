@@ -5,16 +5,15 @@ from item import Item
 
 
 class Room:
-    name: str
-    description: str
+    # items: [Item] = []
 
-    items: [Item] = []
-
-    linkedRooms = {}
+    # linkedRooms = {}
 
     def __init__(self, name, desc):
         self.name = name
         self.description = desc
+        self.items = []
+        self.linkedRooms = {}
 
 
     def addItem(self, item):

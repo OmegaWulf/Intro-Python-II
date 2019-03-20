@@ -64,7 +64,6 @@ newPlayer = Player(room['outside'])
 #
 # If the user enters "q", quit the game.
 
-#if newPlayer.currentRoom.linkedRooms[direction] is not None:
 
 # Private Functions
 def moveTo(direction):
@@ -78,12 +77,14 @@ def take(itemName):
         if i.name == itemName:
             newPlayer.currentRoom.removeItem(itemName)
             newPlayer.addItem(i)
+            i.onTake()
 
 def drop(itemName):
     for i in newPlayer.items:
         if i.name == itemName:
             newPlayer.removeItem(itemName)
             newPlayer.currentRoom.addItem(i)
+            i.onDrop()
 
 def showInventory():
     if len(newPlayer.items) > 0:
@@ -103,8 +104,8 @@ def listRoomInventory():
 
 # Loop
 while True:
-    print(f"\nCurrently in room: {newPlayer.currentRoom.name}")
-    print(f"\n{newPlayer.currentRoom.description}")
+    print(f"===\nCurrent room: {newPlayer.currentRoom.name}")
+    print(f"\n{newPlayer.currentRoom.description}\n===")
     listRoomInventory()
 
     action = input("\nChoose an action:").split()
