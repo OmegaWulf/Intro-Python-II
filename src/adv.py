@@ -1,6 +1,7 @@
 from room import Room
 from player import Player
 from item import Item
+from world import World
 
 # Declare all the rooms
 
@@ -53,6 +54,9 @@ room['outside'].addItem(sword)
 
 # Make a new player object that is currently in the 'outside' room.
 newPlayer = Player(room['outside'])
+
+newWorld = World(newPlayer)
+newWorld.rooms = room
 # Write a loop that:
 #
 # * Prints the current room name
@@ -102,6 +106,7 @@ def listRoomInventory():
             itemList += f"{i.name} "
         print(itemList)
 
+
 # Loop
 while True:
     print(f"===\nCurrent room: {newPlayer.currentRoom.name}")
@@ -111,7 +116,7 @@ while True:
     action = input("\nChoose an action:").split()
 
     if len(action) == 1:
-        if str(action[0]) in ('q'):
+        if str(action[0]) in ('q', 'quit'):
             print("Done")
             break
 
@@ -120,6 +125,9 @@ while True:
 
         elif str(action[0]) in ('i', 'inventory'):
             showInventory()
+
+        elif str(action[0]) in ('m', 'map'):
+            newWorld.showMap(newPlayer)
 
         else:
             print(f"Not a valid command")
