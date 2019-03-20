@@ -87,12 +87,12 @@ def drop(itemName):
 
 def showInventory():
     if len(newPlayer.items) > 0:
-        itemList = "Your inventory contains: "
+        itemList = "\nYour inventory contains: "
         for i in newPlayer.items:
             itemList += f"{i.name} "
         print(itemList)
     else:
-        print(f"You have nothing in your inventory")
+        print(f"\nYou have nothing in your inventory")
 
 def listRoomInventory():
     if len(newPlayer.currentRoom.items) > 0:
@@ -103,21 +103,21 @@ def listRoomInventory():
 
 # Loop
 while True:
-    print(f"\n Currently in room: {newPlayer.currentRoom.name}")
-    print(f"\n {newPlayer.currentRoom.description}")
+    print(f"\nCurrently in room: {newPlayer.currentRoom.name}")
+    print(f"\n{newPlayer.currentRoom.description}")
     listRoomInventory()
 
     action = input("\nChoose an action:").split()
 
     if len(action) == 1:
-        if action == 'q':
+        if str(action[0]) in ('q'):
             print("Done")
             break
 
-        if action in ('n', 'e', 's', 'w'):
-            moveTo(action)
+        elif str(action[0]) in ('n', 'e', 's', 'w'):
+            moveTo(str(action[0]))
 
-        elif action in ('i', 'inventory'):
+        elif str(action[0]) in ('i', 'inventory'):
             showInventory()
 
         else:
