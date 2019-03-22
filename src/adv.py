@@ -1,4 +1,7 @@
 from room import Room
+from player import Player
+from item import Item
+from world import World
 
 # Declare all the rooms
 
@@ -24,21 +27,36 @@ earlier adventurers. The only exit is to the south."""),
 
 # Link rooms together
 
-room['outside'].n_to = room['foyer']
-room['foyer'].s_to = room['outside']
-room['foyer'].n_to = room['overlook']
-room['foyer'].e_to = room['narrow']
-room['overlook'].s_to = room['foyer']
-room['narrow'].w_to = room['foyer']
-room['narrow'].n_to = room['treasure']
-room['treasure'].s_to = room['narrow']
+#room['outside'].n_to = room['foyer']
+#room['foyer'].s_to = room['outside']
+#room['foyer'].n_to = room['overlook']
+#room['foyer'].e_to = room['narrow']
+#room['overlook'].s_to = room['foyer']
+#room['narrow'].w_to = room['foyer']
+#room['narrow'].n_to = room['treasure']
+#room['treasure'].s_to = room['narrow']
+
+room['outside'].linkRoomTo(room['foyer'], 'n')
+room['foyer'].linkRoomTo(room['outside'], 's')
+room['foyer'].linkRoomTo(room['overlook'], 'n')
+room['foyer'].linkRoomTo(room['narrow'], 'e')
+room['overlook'].linkRoomTo(room['foyer'], 's')
+room['narrow'].linkRoomTo(room['foyer'], 'w')
+room['narrow'].linkRoomTo(room['treasure'], 'n')
+room['treasure'].linkRoomTo(room['narrow'], 's')
+
+sword = Item("Sword", "A big sword")
+room['outside'].addItem(sword)
 
 #
 # Main
 #
 
 # Make a new player object that is currently in the 'outside' room.
+newPlayer = Player(room['outside'])
 
+newWorld = World(newPlayer)
+newWorld.rooms = room
 # Write a loop that:
 #
 # * Prints the current room name
@@ -49,3 +67,77 @@ room['treasure'].s_to = room['narrow']
 # Print an error message if the movement isn't allowed.
 #
 # If the user enters "q", quit the game.
+
+
+# Private Functions
+def moveTo(direction):
+    if direction in newPlayer.currentRoom.linkedRooms:
+        newPlayer.currentRoom = newPlayer.currentRoom.linkedRooms[direction]
+    else:
+        print(f"Not a valid move")
+
+def take(itemName):
+    for i in newPlayer.currentRoom.items:
+        if i.name == itemName:
+            newPlayer.currentRoom.removeItem(itemName)
+            newPlayer.addItem(i)
+            i.onTake()
+
+def drop(itemName):
+    for i in newPlayer.items:
+        if i.name == itemName:
+            newPlayer.removeItem(itemName)
+            newPlayer.currentRoom.addItem(i)
+            i.onDrop()
+
+def showInventory():
+    if len(newPlayer.items) > 0:
+        itemList = "\nYour inventory contains: "
+        for i in newPlayer.items:
+            itemList += f"{i.name} "
+        print(itemList)
+    else:
+        print(f"\nYou have nothing in your inventory")
+
+def listRoomInventory():
+    if len(newPlayer.currentRoom.items) > 0:
+        itemList = "This room contains: "
+        for i in newPlayer.currentRoom.items:
+            itemList += f"{i.name} "
+        print(itemList)
+
+
+# Loop
+while True:
+    print(f"===\nCurrent room: {newPlayer.currentRoom.name}")
+    print(f"\n{newPlayer.currentRoom.description}\n===")
+    listRoomInventory()
+
+    action = input("\nChoose an action:").split()
+
+    if len(action) == 1:
+        if str(action[0]) in ('q', 'quit'):
+            print("Done")
+            break
+
+        elif str(action[0]) in ('n', 'e', 's', 'w'):
+            moveTo(str(action[0]))
+
+        elif str(action[0]) in ('i', 'inventory'):
+            showInventory()
+
+        elif str(action[0]) in ('m', 'map'):
+            newWorld.showMap(newPlayer)
+
+        else:
+            print(f"Not a valid command")
+
+    elif len(action) == 2:
+        if action[0] == 'take':
+            take(action[1])
+
+        elif action[0] == 'drop':
+            drop(action[1])
+
+        else:
+            print(f"not a valid command")
